@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM - Examen Civique Français</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #002395 0%, #ED2939 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 30px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #4c51bf;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1em;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .option.not-selected-correct {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-card h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .score-details {
+            font-size: 1.3em;
+            margin-top: 15px;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 60px 30px;
+        }
+
+        .start-screen h2 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .start-screen ul {
+            text-align: left;
+            max-width: 500px;
+            margin: 30px auto;
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .question-text {
+                font-size: 1.1em;
+            }
+            
+            button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇫🇷 Examen Civique Français</h1>
+            <p>Quiz de préparation à la naturalisation</p>
+        </div>
+
+        <div id="startScreen" class="content">
+            <div class="start-screen">
+                <h2>Bienvenue ! 👋</h2>
+                <p>Ce quiz vous permet de vous entraîner pour l'examen civique de naturalisation française.</p>
+                <ul>
+                    <li>✅ 40 questions aléatoires</li>
+                    <li>🎲 Questions mélangées à chaque session</li>
+                    <li>📚 5 thématiques couvertes</li>
+                    <li>✓ Correction détaillée à la fin</li>
+                </ul>
+                <div class="buttons">
+                    <button onclick="startQuiz()">Commencer le Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="quizScreen" class="content" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div id="questionsContainer"></div>
+            <div class="buttons">
+                <button id="submitBtn" onclick="submitQuiz()">Valider mes réponses</button>
+            </div>
+        </div>
+
+        <div id="resultScreen" class="content" style="display: none;">
+            <div class="result-card">
+                <h2>Résultats du Quiz</h2>
+                <div class="score" id="scoreDisplay"></div>
+                <div class="score-details" id="scoreDetails"></div>
+            </div>
+            <div id="correctionContainer"></div>
+            <div class="buttons">
+                <button onclick="restartQuiz()">Recommencer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Principes et valeurs de la République
+            {
+                category: "Principes et valeurs",
+                question: "Complétez les paroles de la Marseillaise \"Allons enfants de la patrie...\"",
+                options: ["Le jour de gloire est arrivé", "Contre nous de la tyrannie", "Marchons, marchons", "Aux armes citoyens"],
+                correct: ["Le jour de gloire est arrivé"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Dans le cadre d'un entretien d'embauche, que peut-on demander au candidat ?",
+                options: ["Son âge", "Ses compétences professionnelles et son parcours", "Sa religion", "Sa situation familiale"],
+                correct: ["Ses compétences professionnelles et son parcours"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Déclarer ses revenus aux services fiscaux est :",
+                options: ["Une obligation légale", "Un choix personnel", "Facultatif", "Réservé aux riches"],
+                correct: ["Une obligation légale"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "En France, les impôts permettent de financer les dépenses publiques. Quelle proposition est correcte ?",
+                options: ["Les services publics", "Uniquement l'armée", "Les entreprises privées", "Les partis politiques"],
+                correct: ["Les services publics"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "La liberté d'association est :",
+                options: ["Le droit de créer ou rejoindre une association", "Interdite", "Réservée aux Français", "Un privilège"],
+                correct: ["Le droit de créer ou rejoindre une association"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "La liberté d'expression sur les réseaux sociaux en France est :",
+                options: ["Totale", "Encadrée par la loi", "Interdite", "Réservée aux citoyens"],
+                correct: ["Encadrée par la loi"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Lequel de ces prénoms évoque un symbole de la République ?",
+                options: ["Marie", "Marianne", "Marine", "Martine"],
+                correct: ["Marianne"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Lequel de ces symboles représente la République française ?",
+                options: ["L'aigle", "Marianne", "Le lion", "La couronne"],
+                correct: ["Marianne"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Où peut-on voir la devise de la République ?",
+                options: ["Sur les bâtiments publics", "Sur les voitures", "Sur les passeports uniquement", "Nulle part"],
+                correct: ["Sur les bâtiments publics"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Lesquels sont des symboles officiels de la République française ?",
+                options: ["Le drapeau", "Marianne", "La Marseillaise", "La devise"],
+                correct: ["Le drapeau", "Marianne", "La Marseillaise", "La devise"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Peut-on brûler publiquement un drapeau français ?",
+                options: ["Oui", "Non", "Seulement lors de manifestations", "Avec autorisation"],
+                correct: ["Non"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quand la sécurité sociale a-t-elle été établie en France ?",
+                options: ["1789", "1905", "1945", "1958"],
+                correct: ["1945"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Que commémore la fête nationale ?",
+                options: ["La victoire de 1945", "La prise de la Bastille", "L'armistice", "La révolution"],
+                correct: ["La prise de la Bastille"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Que porte Marianne sur la tête ?",
+                options: ["Une couronne", "Un bonnet phrygien", "Un chapeau", "Un voile"],
+                correct: ["Un bonnet phrygien"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quel symbole de la République peut-on voir sur les maillots de l'équipe de France de football ?",
+                options: ["Le coq", "Marianne", "Le drapeau", "La devise"],
+                correct: ["Le coq"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quelle est la devise de la République française ?",
+                options: ["Dieu et mon droit", "Liberté, Égalité, Fraternité", "Un pour tous, tous pour un", "Honneur et Patrie"],
+                correct: ["Liberté, Égalité, Fraternité"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Qu'est-ce que la liberté d'association ?",
+                options: ["Un droit garanti par la loi", "Un privilège", "Une autorisation spéciale", "Rien"],
+                correct: ["Un droit garanti par la loi"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Qu'est-ce qu'une liberté ?",
+                options: ["Faire ce qu'on veut", "Un droit fondamental", "Une absence de règles", "Un privilège"],
+                correct: ["Un droit fondamental"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Sur quel document peut-on voir Marianne ?",
+                options: ["Les pièces de monnaie", "Les billets de banque uniquement", "Les cartes bancaires", "Nulle part"],
+                correct: ["Les pièces de monnaie"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Une des valeurs de la devise républicaine est l'Égalité. Qu'est-ce que cela signifie ?",
+                options: ["Tout le monde gagne pareil", "L'égalité devant la loi", "Pas de différences", "Tout le monde pense pareil"],
+                correct: ["L'égalité devant la loi"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Une personne peut-elle changer librement de religion en France ?",
+                options: ["Oui", "Non", "Avec autorisation", "Jamais"],
+                correct: ["Oui"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Que peut faire un usager du service public dans une mairie ?",
+                options: ["Exiger un traitement de faveur", "Être accueilli sans discrimination", "Choisir son agent", "Refuser d'attendre"],
+                correct: ["Être accueilli sans discrimination"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "En France, il est possible pour l'État de financer :",
+                options: ["Les églises", "Les services publics et l'intérêt général", "Les partis politiques uniquement", "Les entreprises privées"],
+                correct: ["Les services publics et l'intérêt général"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "En quelle année la loi de séparation des Églises et de l'État a-t-elle été votée ?",
+                options: ["1789", "1881", "1905", "1945"],
+                correct: ["1905"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Que dit la loi de 1905 ?",
+                options: ["Séparation des Églises et de l'État", "Droit de vote des femmes", "Abolition de l'esclavage", "École gratuite"],
+                correct: ["Séparation des Églises et de l'État"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Que garantit le principe de laïcité ?",
+                options: ["L'interdiction des religions", "La liberté de conscience et la neutralité de l'État", "La religion obligatoire", "Le catholicisme"],
+                correct: ["La liberté de conscience et la neutralité de l'État"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quel jour célèbre-t-on officiellement la laïcité en France ?",
+                options: ["14 juillet", "9 décembre", "1er janvier", "11 novembre"],
+                correct: ["9 décembre"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quel symbole religieux peut être porté dans une école publique dans le respect de la laïcité ?",
+                options: ["Un voile", "Une grande croix", "Aucun", "Tous les symboles discrets"],
+                correct: ["Aucun"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quel terme désigne précisément la haine ou les préjugés contre les Juifs ?",
+                options: ["Racisme", "L'antisémitisme", "Discrimination", "Xénophobie"],
+                correct: ["L'antisémitisme"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quel texte est considéré comme le texte fondateur de la laïcité ?",
+                options: ["La Constitution", "La loi de 1905", "La DDHC", "Le Code civil"],
+                correct: ["La loi de 1905"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Quelle institution française doit rester neutre en matière de religion ?",
+                options: ["Les entreprises privées", "Les services publics", "Les associations", "Les syndicats"],
+                correct: ["Les services publics"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Qu'est-ce que la laïcité ?",
+                options: ["L'interdiction des religions", "Neutralité de l'État et liberté de conscience", "La religion d'État", "L'athéisme obligatoire"],
+                correct: ["Neutralité de l'État et liberté de conscience"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "À l'école, la charte de la laïcité permet de :",
+                options: ["Interdire toute religion", "Rappeler les règles de la République", "Obliger à être athée", "Choisir sa religion"],
+                correct: ["Rappeler les règles de la République"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Qui doit respecter et veiller à la neutralité religieuse dans les services publics ?",
+                options: ["Seulement les directeurs", "Les agents publics", "Personne", "Les usagers"],
+                correct: ["Les agents publics"]
+            },
+            {
+                category: "Principes et valeurs",
+                question: "Une personne déclare ne croire en aucun dieu. On peut dire :",
+                options: ["Elle est catholique", "Athée", "Laïque", "Agnostique"],
+                correct: ["Athée"]
+            },
+
+            // Système institutionnel et politique
+            {
+                category: "Système politique",
+                question: "Comment est désigné le Premier ministre ?",
+                options: ["Élu au suffrage universel", "Nommé par le Président", "Désigné par le Parlement", "Tiré au sort"],
+                correct: ["Nommé par le Président"]
+            },
+            {
+                category: "Système politique",
+                question: "À qui appartient la souveraineté nationale ?",
+                options: ["Au Président", "Au peuple", "Au Parlement", "Au gouvernement"],
+                correct: ["Au peuple"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui est élu lors des élections municipales ?",
+                options: ["Le maire", "Les conseillers municipaux", "Le député", "Le préfet"],
+                correct: ["Les conseillers municipaux"]
+            },
+            {
+                category: "Système politique",
+                question: "L'inscription sur les listes électorales est :",
+                options: ["Facultative", "Obligatoire pour voter", "Automatique", "Interdite"],
+                correct: ["Obligatoire pour voter"]
+            },
+            {
+                category: "Système politique",
+                question: "Quelle condition est nécessaire pour voter aux élections présidentielles ?",
+                options: ["Avoir 21 ans", "Être inscrit sur les listes électorales", "Avoir un diplôme", "Être propriétaire"],
+                correct: ["Être inscrit sur les listes électorales"]
+            },
+            {
+                category: "Système politique",
+                question: "Une personne, n'ayant pas d'accès à internet, veut s'inscrire sur les listes électorales. Où peut-elle s'inscrire ?",
+                options: ["À la préfecture", "À la mairie", "Au commissariat", "À la poste"],
+                correct: ["À la mairie"]
+            },
+            {
+                category: "Système politique",
+                question: "À quel âge peut-on devenir électeur ?",
+                options: ["16 ans", "17 ans", "18 ans", "21 ans"],
+                correct: ["18 ans"]
+            },
+            {
+                category: "Système politique",
+                question: "En France, est-ce obligatoire de voter ?",
+                options: ["Oui", "Non", "Seulement aux présidentielles", "Oui avec amende"],
+                correct: ["Non"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui vote les lois ?",
+                options: ["Le Président", "Le gouvernement", "Le Parlement", "Les citoyens"],
+                correct: ["Le Parlement"]
+            },
+            {
+                category: "Système politique",
+                question: "La séparation des pouvoirs est un principe fondamental. Quels sont les trois pouvoirs concernés ?",
+                options: ["Exécutif, législatif, judiciaire", "Président, Premier ministre, Parlement", "État, Région, Commune", "Police, Justice, Armée"],
+                correct: ["Exécutif, législatif, judiciaire"]
+            },
+            {
+                category: "Système politique",
+                question: "Quelles sont les durées du mandat du conseil municipal et du maire ?",
+                options: ["4 ans", "5 ans", "6 ans", "7 ans"],
+                correct: ["5 ans"]
+            },
+            {
+                category: "Système politique",
+                question: "Quelle est la durée du mandat du Président de la République française ?",
+                options: ["4 ans", "5 ans", "7 ans", "10 ans"],
+                correct: ["5 ans"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui dirige l'action du gouvernement ?",
+                options: ["Le Président", "Le Premier ministre", "Le ministre de l'Intérieur", "L'Assemblée"],
+                correct: ["Le Premier ministre"]
+            },
+            {
+                category: "Système politique",
+                question: "En France, est-ce possible d'adhérer à un parti politique ?",
+                options: ["Non", "Oui", "Seulement si on est élu", "Avec autorisation"],
+                correct: ["Oui"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui sanctionne l'auteur d'un vol ?",
+                options: ["La police", "La justice", "Le maire", "Le préfet"],
+                correct: ["La justice"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui gère les collèges publics ?",
+                options: ["L'État", "La région", "Le département", "La commune"],
+                correct: ["Le département"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui gère les écoles primaires et maternelles publiques ?",
+                options: ["L'État", "La région", "Le département", "La commune"],
+                correct: ["La commune"]
+            },
+            {
+                category: "Système politique",
+                question: "Quelle collectivité territoriale est responsable des transports régionaux ?",
+                options: ["L'État", "La région", "Le département", "La commune"],
+                correct: ["La région"]
+            },
+            {
+                category: "Système politique",
+                question: "Quelle est l'une des voies possibles pour modifier la Constitution ?",
+                options: ["Décret présidentiel", "Le référendum", "Vote à l'Assemblée seulement", "Décision du Premier ministre"],
+                correct: ["Le référendum"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui représente l'État dans un département ?",
+                options: ["Le maire", "Le député", "Le préfet", "Le président du conseil départemental"],
+                correct: ["Le préfet"]
+            },
+            {
+                category: "Système politique",
+                question: "Quel est le rôle du Conseil constitutionnel ?",
+                options: ["Voter les lois", "Contrôler la conformité des lois", "Gérer le budget", "Nommer les ministres"],
+                correct: ["Contrôler la conformité des lois"]
+            },
+            {
+                category: "Système politique",
+                question: "En quelle année la citoyenneté européenne a-t-elle été créée ?",
+                options: ["1957", "1986", "1992", "2002"],
+                correct: ["1992"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui a composé l'hymne de l'Union européenne ?",
+                options: ["Mozart", "Beethoven", "Bach", "Chopin"],
+                correct: ["Beethoven"]
+            },
+            {
+                category: "Système politique",
+                question: "Quand est célébrée la journée de l'Europe ?",
+                options: ["1er mai", "9 mai", "14 juillet", "21 juin"],
+                correct: ["9 mai"]
+            },
+            {
+                category: "Système politique",
+                question: "Où est le siège de la Banque centrale européenne ?",
+                options: ["Paris", "Bruxelles", "Francfort", "Luxembourg"],
+                correct: ["Francfort"]
+            },
+            {
+                category: "Système politique",
+                question: "Où est le siège de la Commission européenne ?",
+                options: ["Paris", "Bruxelles", "Strasbourg", "Luxembourg"],
+                correct: ["Bruxelles"]
+            },
+            {
+                category: "Système politique",
+                question: "Combien d'États font partie de l'Union européenne au 1er janvier 2025 ?",
+                options: ["25", "27", "28", "30"],
+                correct: ["27"]
+            },
+            {
+                category: "Système politique",
+                question: "Quel État a quitté l'Union Européenne en 2020 ?",
+                options: ["La Norvège", "La Suisse", "Le Royaume-Uni", "L'Islande"],
+                correct: ["Le Royaume-Uni"]
+            },
+            {
+                category: "Système politique",
+                question: "Quel est l'hymne de l'Union Européenne ?",
+                options: ["La Marseillaise", "L'Ode à la joie", "Imagine", "We are the champions"],
+                correct: ["L'Ode à la joie"]
+            },
+            {
+                category: "Système politique",
+                question: "Qui élit les députés européens ?",
+                options: ["Les gouvernements", "Les citoyens européens", "Le Parlement national", "La Commission"],
+                correct: ["Les citoyens européens"]
+            },
+            {
+                category: "Système politique",
+                question: "Où est le siège du Parlement européen ?",
+                options: ["Paris", "Bruxelles", "Strasbourg", "Luxembourg"],
+                correct: ["Strasbourg"]
+            },
+
+            // Droits et devoirs
+            {
+                category: "Droits et devoirs",
+                question: "À quoi sert le droit de grève ?",
+                options: ["À ne pas travailler", "Défendre des revendications", "Faire la fête", "Partir en vacances"],
+                correct: ["Défendre des revendications"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Au nom de quoi l'État justifie-t-il la restriction des droits ?",
+                options: ["De la tradition", "L'ordre public", "De l'économie", "De la religion"],
+                correct: ["L'ordre public"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quel texte affirme que tous les hommes naissent libres et égaux en droits ?",
+                options: ["La Constitution", "La DDHC de 1789", "Le Code civil", "La Charte"],
+                correct: ["La DDHC de 1789"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "L'article 4 de la Déclaration des droits de l'homme et du citoyen affirme que \"la liberté consiste à pouvoir faire tout ce qui ne nuit pas à autrui\". Qu'est-ce que cela signifie ?",
+                options: ["On peut tout faire", "Respecter la liberté des autres", "La liberté est illimitée", "Obéir à l'État"],
+                correct: ["Respecter la liberté des autres"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Que garantit la liberté de la presse ?",
+                options: ["Le secret", "Informer librement", "La censure", "La propagande"],
+                correct: ["Informer librement"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Que permet la liberté de circulation ?",
+                options: ["Voyager gratuitement", "Se déplacer librement", "Conduire sans permis", "Traverser n'importe où"],
+                correct: ["Se déplacer librement"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Que signifie être citoyen d'un État ?",
+                options: ["Y vivre", "Avoir des droits et des devoirs", "Y être né", "Y travailler"],
+                correct: ["Avoir des droits et des devoirs"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quel droit protège une personne contre une arrestation arbitraire ?",
+                options: ["Le droit de grève", "La présomption d'innocence", "Le droit de vote", "La liberté d'expression"],
+                correct: ["La présomption d'innocence"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quel est le texte fondateur établissant les droits et les devoirs de chaque citoyen ?",
+                options: ["Le Code pénal", "La DDHC", "La Constitution", "Le Code civil"],
+                correct: ["La DDHC"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quelle situation est une atteinte à la dignité humaine ?",
+                options: ["Le chômage", "La torture", "La pauvreté", "La maladie"],
+                correct: ["La torture"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Qu'est-ce que la liberté d'expression ?",
+                options: ["Dire ce qu'on veut", "Exprimer ses opinions", "Insulter librement", "Mentir sans conséquence"],
+                correct: ["Exprimer ses opinions"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Tous les citoyens français ont-ils une religion ?",
+                options: ["Oui", "Non", "Obligatoirement catholique", "Seulement les adultes"],
+                correct: ["Non"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "À quel âge est la majorité numérique en France ?",
+                options: ["13 ans", "15 ans", "16 ans", "18 ans"],
+                correct: ["15 ans"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "En France, la conduite sans permis d'une moto est :",
+                options: ["Autorisée", "Tolérée", "Illégale", "Réservée aux jeunes"],
+                correct: ["Illégale"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "En quoi consiste le devoir de solidarité ?",
+                options: ["Payer des impôts", "Aider les plus fragiles", "Voter", "Respecter la loi"],
+                correct: ["Aider les plus fragiles"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Est-ce légal d'être marié à plusieurs personnes en même temps ?",
+                options: ["Oui", "Non", "Avec autorisation", "Dans certaines régions"],
+                correct: ["Non"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Est-ce obligatoire de déclarer ses impôts chaque année en France ?",
+                options: ["Non", "Oui", "Seulement si on gagne beaucoup", "Tous les 5 ans"],
+                correct: ["Oui"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Est-il obligatoire de porter secours à une personne en danger ?",
+                options: ["Non", "Oui", "Seulement pour les médecins", "Si on veut"],
+                correct: ["Oui"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quel est l'âge de la majorité civile en France ?",
+                options: ["16 ans", "17 ans", "18 ans", "21 ans"],
+                correct: ["18 ans"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Le non-respect du code de la route est :",
+                options: ["Normal", "Toléré", "Une infraction", "Grave seulement si accident"],
+                correct: ["Une infraction"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quelle est l'infraction la plus grave ?",
+                options: ["La contravention", "Le délit", "Le crime", "L'amende"],
+                correct: ["Le crime"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Pour quel motif peut-on limiter la liberté d'expression ?",
+                options: ["Pour le plaisir", "La protection de l'ordre public", "L'opinion politique", "La religion"],
+                correct: ["La protection de l'ordre public"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Quel est l'un des devoirs principaux d'un citoyen français ?",
+                options: ["Être riche", "Respecter la loi", "Avoir des enfants", "Être catholique"],
+                correct: ["Respecter la loi"]
+            },
+            {
+                category: "Droits et devoirs",
+                question: "Une personne est privée de ses droits civils et politiques pendant 5 ans suite à une condamnation. Pendant 5 ans,...",
+                options: ["Elle peut voter", "Ne peut ni voter ni être candidat", "Peut être candidat", "Peut faire appel"],
+                correct: ["Ne peut ni voter ni être candidat"]
+            },
+
+            // Histoire, géographie et culture
+            {
+                category: "Histoire et culture",
+                question: "En quelle année a débuté la Révolution française ?",
+                options: ["1789", "1792", "1804", "1815"],
+                correct: ["1789"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "En quelle année Napoléon Ier est-il devenu empereur ?",
+                options: ["1789", "1799", "1804", "1815"],
+                correct: ["1804"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "De quand date l'appel à la résistance du général de Gaulle ?",
+                options: ["1939", "18 juin 1940", "1944", "1945"],
+                correct: ["18 juin 1940"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Quand a eu lieu la Seconde guerre mondiale ?",
+                options: ["1914-1918", "1939-1945", "1940-1944", "1941-1945"],
+                correct: ["1939-1945"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Quand a eu lieu la Première guerre mondiale ?",
+                options: ["1870-1871", "1914-1918", "1939-1945", "1950-1953"],
+                correct: ["1914-1918"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Sous quel président a été abolie la peine de mort en France ?",
+                options: ["Charles de Gaulle", "Georges Pompidou", "François Mitterrand", "Jacques Chirac"],
+                correct: ["François Mitterrand"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Depuis quand l'esclavage a-t-il été aboli en France ?",
+                options: ["1789", "1794", "1848", "1905"],
+                correct: ["1848"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Qui a aboli l'esclavage en France ?",
+                options: ["Napoléon", "Victor Schœlcher", "Louis XIV", "De Gaulle"],
+                correct: ["Victor Schœlcher"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Depuis quelle année l'école publique est-elle gratuite ?",
+                options: ["1789", "1848", "1881", "1905"],
+                correct: ["1881"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "En 1944, qu'est-ce qui a changé pour les femmes ?",
+                options: ["Droit de travailler", "Droit de vote", "Droit au divorce", "Droit à l'éducation"],
+                correct: ["Droit de vote"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "En quelle année l'euro est-il devenu la monnaie officielle de la France ?",
+                options: ["1999", "2000", "2002", "2005"],
+                correct: ["2002"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Dans quel grand musée parisien est exposée la Joconde ?",
+                options: ["Le musée d'Orsay", "Le Louvre", "Le Grand Palais", "Le Centre Pompidou"],
+                correct: ["Le Louvre"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Quel château célèbre se trouve près de Paris et symbolise le pouvoir royal de Louis XIV ?",
+                options: ["Chambord", "Fontainebleau", "Versailles", "Chenonceau"],
+                correct: ["Versailles"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Où peut-on voir des peintures préhistoriques en France ?",
+                options: ["Au Louvre", "Lascaux", "Versailles", "Fontainebleau"],
+                correct: ["Lascaux"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Quel peintre célèbre a peint les Nymphéas ?",
+                options: ["Monet", "Renoir", "Cézanne", "Delacroix"],
+                correct: ["Monet"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Quelle est la plus haute montagne de France ?",
+                options: ["Le Mont Blanc", "Le Mont Ventoux", "Le Pic du Midi", "La Meije"],
+                correct: ["Le Mont Blanc"]
+            },
+            {
+                category: "Histoire et culture",
+                question: "Quel fleuve traverse Paris ?",
+                options: ["La Loire", "Le Rhône", "La Seine", "La Garonne"],
+                correct: ["La Seine"]
+            },
+
+            // Vivre dans la société française
+            {
+                category: "Vie en société",
+                question: "Où faut-il déclarer la naissance d'un enfant ?",
+                options: ["À l'hôpital", "À la mairie", "À la préfecture", "À la CAF"],
+                correct: ["À la mairie"]
+            },
+            {
+                category: "Vie en société",
+                question: "Quel mariage est reconnu légalement ?",
+                options: ["Le mariage religieux", "Le mariage civil", "Le PACS", "Le concubinage"],
+                correct: ["Le mariage civil"]
+            },
+            {
+                category: "Vie en société",
+                question: "Le stationnement sur une place réservée aux personnes handicapées :",
+                options: ["Est autorisé 5 minutes", "Interdit", "Autorisé si on a une carte", "Gratuit"],
+                correct: ["Interdit"]
+            },
+            {
+                category: "Vie en société",
+                question: "Quel numéro d'urgence permet d'appeler la police ?",
+                options: ["15", "17", "18", "112"],
+                correct: ["17"]
+            },
+            {
+                category: "Vie en société",
+                question: "Quel numéro d'urgence permet d'appeler le SAMU ?",
+                options: ["15", "17", "18", "112"],
+                correct: ["15"]
+            },
+            {
+                category: "Vie en société",
+                question: "En cas de divorce, qui exerce l'autorité parentale ?",
+                options: ["Le père", "La mère", "Les deux parents", "Le juge"],
+                correct: ["Les deux parents"]
+            },
+            {
+                category: "Vie en société",
+                question: "Quelle aide permet aux personnes qui ont des difficultés financières d'avoir un avocat ?",
+                options: ["Le RSA", "L'aide juridictionnelle", "La CMU", "Les allocations"],
+                correct: ["L'aide juridictionnelle"]
+            },
+            {
+                category: "Vie en société",
+                question: "Auprès de quel organisme faut-il demander le remboursement des frais de santé ?",
+                options: ["La CAF", "L'Assurance maladie", "Pôle emploi", "La mairie"],
+                correct: ["L'Assurance maladie"]
+            },
+            {
+                category: "Vie en société",
+                question: "Qu'est-ce que le SMIC ?",
+                options: ["Une aide sociale", "Le salaire minimum", "Une assurance", "Un impôt"],
+                correct: ["Le salaire minimum"]
+            },
+            {
+                category: "Vie en société",
+                question: "Quelle est la durée légale du temps de travail par semaine ?",
+                options: ["30 heures", "35 heures", "39 heures", "40 heures"],
+                correct: ["35 heures"]
+            },
+            {
+                category: "Vie en société",
+                question: "Une personne étrangère, en situation régulière, peut créer son entreprise :",
+                options: ["Non", "Oui", "Avec autorisation", "Jamais"],
+                correct: ["Oui"]
+            },
+            {
+                category: "Vie en société",
+                question: "Quels sont les textes qui définissent les règles au travail ?",
+                options: ["La Constitution", "Le Code du travail", "Le Code civil", "La loi de 1905"],
+                correct: ["Le Code du travail"]
+            },
+            {
+                category: "Vie en société",
+                question: "Qui a le droit de se syndiquer ?",
+                options: ["Seulement les ouvriers", "Tous les salariés", "Seulement les fonctionnaires", "Personne"],
+                correct: ["Tous les salariés"]
+            },
+            {
+                category: "Vie en société",
+                question: "L'instruction des enfants est obligatoire de :",
+                options: ["3 à 14 ans", "3 à 16 ans", "6 à 16 ans", "6 à 18 ans"],
+                correct: ["3 à 16 ans"]
+            },
+            {
+                category: "Vie en société",
+                question: "Depuis le 1er juillet 2021, quelle est la durée du congé paternité ?",
+                options: ["11 jours", "14 jours", "25 jours", "28 jours"],
+                correct: ["28 jours"]
+            },
+            {
+                category: "Vie en société",
+                question: "Est-ce possible de punir physiquement ses enfants ?",
+                options: ["Oui", "Non", "Seulement légèrement", "Avec modération"],
+                correct: ["Non"]
+            }
+        ];
+
+        let selectedQuestions = [];
+        let userAnswers = [];
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function startQuiz() {
+            // Sélectionner 40 questions aléatoires
+            const shuffled = shuffleArray(questions);
+            selectedQuestions = shuffled.slice(0, 40);
+            userAnswers = new Array(40).fill(null).map(() => []);
+
+            // Afficher l'écran du quiz
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            document.getElementById('resultScreen').style.display = 'none';
+
+            renderQuestions();
+            updateProgress();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            selectedQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.id = `question-${index}`;
+
+                const shuffledOptions = shuffleArray(q.options);
+                
+                // Stocker les options mélangées pour cette question
+                if (!window.questionOptions) window.questionOptions = {};
+                window.questionOptions[index] = shuffledOptions;
+
+                questionDiv.innerHTML = `
+                    <div class="category-badge">${q.category}</div>
+                    <div class="question-number">Question ${index + 1} / 40</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+                        ${shuffledOptions.map((option, optIndex) => `
+                            <div class="option" onclick="toggleOptionByIndex(${index}, ${optIndex})">
+                                <input type="checkbox" 
+                                       id="q${index}_opt${optIndex}" 
+                                       data-question="${index}"
+                                       data-option="${optIndex}"
+                                       onchange="toggleOptionByIndex(${index}, ${optIndex})">
+                                <label for="q${index}_opt${optIndex}">${option}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function toggleOptionByIndex(questionIndex, optionIndex) {
+            const option = window.questionOptions[questionIndex][optionIndex];
+            const answerArray = userAnswers[questionIndex];
+            const index = answerArray.indexOf(option);
+
+            const checkbox = document.getElementById(`q${questionIndex}_opt${optionIndex}`);
+            
+            if (index > -1) {
+                answerArray.splice(index, 1);
+                if (checkbox) checkbox.checked = false;
+            } else {
+                answerArray.push(option);
+                if (checkbox) checkbox.checked = true;
+            }
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answered = userAnswers.filter(a => a.length > 0).length;
+            const progress = (answered / 40) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function submitQuiz() {
+            // Calculer le score
+            let correctCount = 0;
+
+            selectedQuestions.forEach((q, index) => {
+                const userAnswer = userAnswers[index].sort();
+                const correctAnswer = q.correct.sort();
+
+                if (JSON.stringify(userAnswer) === JSON.stringify(correctAnswer)) {
+                    correctCount++;
+                }
+            });
+
+            // Afficher les résultats
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'block';
+
+            const scorePercent = Math.round((correctCount / 40) * 100);
+            document.getElementById('scoreDisplay').textContent = scorePercent + '%';
+            document.getElementById('scoreDetails').innerHTML = `
+                ${correctCount} / 40 bonnes réponses<br>
+                ${scorePercent >= 50 ? '✅ Réussi !' : '❌ Non réussi'}
+            `;
+
+            // Afficher la correction
+            renderCorrection();
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function renderCorrection() {
+            const container = document.getElementById('correctionContainer');
+            container.innerHTML = '<h3 style="text-align: center; margin-bottom: 20px; color: #333;">Correction détaillée</h3>';
+
+            selectedQuestions.forEach((q, index) => {
+                const userAnswer = userAnswers[index].sort();
+                const correctAnswer = q.correct.sort();
+                const isCorrect = JSON.stringify(userAnswer) === JSON.stringify(correctAnswer);
+
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.style.borderLeftColor = isCorrect ? '#28a745' : '#dc3545';
+
+                questionDiv.innerHTML = `
+                    <div class="category-badge">${q.category}</div>
+                    <div class="question-number">
+                        Question ${index + 1} 
+                        ${isCorrect ? '<span style="color: #28a745;">✓ Correct</span>' : '<span style="color: #dc3545;">✗ Incorrect</span>'}
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+                        ${q.options.map(option => {
+                            const isUserSelected = userAnswer.includes(option);
+                            const isCorrectAnswer = correctAnswer.includes(option);
+                            
+                            let className = 'option';
+                            if (isCorrectAnswer && isUserSelected) {
+                                className += ' correct';
+                            } else if (isUserSelected && !isCorrectAnswer) {
+                                className += ' incorrect';
+                            } else if (isCorrectAnswer && !isUserSelected) {
+                                className += ' not-selected-correct';
+                            }
+
+                            return `
+                                <div class="${className}">
+                                    <input type="checkbox" 
+                                           ${isUserSelected ? 'checked' : ''} 
+                                           disabled>
+                                    <label>${option}</label>
+                                    ${isCorrectAnswer ? ' <strong>✓ Bonne réponse</strong>' : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function restartQuiz() {
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
